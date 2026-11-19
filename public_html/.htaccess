@@ -1,0 +1,23 @@
+# ============================================================
+# .htaccess - Clean URL routing
+# ============================================================
+
+# Enable mod_rewrite
+RewriteEngine On
+
+# Redirect old .php URLs to clean URLs (301 permanent)
+# Example: /about.php -> /about
+RewriteCond %{THE_REQUEST} \s/([^.]+)\.php [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# If the request is for a real file, directory, or symbolic link, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteRule ^ - [L]
+
+# Otherwise, route everything to index.php (front-controller)
+RewriteRule ^ index.php [QSA,L]
+
+# Custom 404 error page (if not handled in PHP)
+ErrorDocument 404 /404.php
